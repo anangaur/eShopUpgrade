@@ -1,4 +1,5 @@
-﻿using System;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 
 namespace eShopLegacyMVC.Models
@@ -16,8 +17,8 @@ namespace eShopLegacyMVC.Models
             {
                 if (remainningLoIds == 0)
                 {
-                    var rawQuery = db.Database.SqlQuery<Int64>("SELECT NEXT VALUE FOR catalog_hilo;");
-                    sequenceId = (int)rawQuery.Single();
+                    var maxId = db.CatalogItems.Max(i => (int?)i.Id) ?? 0;
+                    sequenceId = maxId + 1;
                     remainningLoIds = HiLoIncrement - 1;
                     return sequenceId;
                 }
